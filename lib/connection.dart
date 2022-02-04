@@ -4,8 +4,10 @@ import 'package:booking_appointments/classes/appointment_hour.dart';
 import 'package:booking_appointments/classes/doctor.dart';
 import 'package:booking_appointments/classes/booking.dart';
 import 'package:booking_appointments/classes/lab.dart';
+import 'package:booking_appointments/classes/unvailed_booking.dart';
 import 'package:booking_appointments/classes/user.dart';
 import 'package:booking_appointments/global.dart';
+import 'package:booking_appointments/unvailed_booking.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -117,8 +119,6 @@ class Connection {
       return user;
   }
 
-
-
   Future booking(String doctor_name, String day, String history, int hour) async{
     Global g = Global();
     var url = '$baseUrl/test/sendData/sendData.php';
@@ -194,7 +194,6 @@ class Connection {
     return AppointmentsList;
   }
 
-
   Future labBooking(String availableDay, String availableHour, String day, String id_lab) async{
     Global g = Global();
     var url = '$baseUrl/test/sendData/sendData.php';
@@ -212,7 +211,22 @@ class Connection {
     }
   }
 
+  Future <List<UnvailedBooking>> getUnvaliedBooking() async {
+    var url = '$baseUrl/test/sendData/sendData.php';
 
+    final responce = await http.post(Uri.parse(url), body: {
+      'action' : 'getUnvaliedBooking',
+    });
+    var unvalied_booking = <UnvailedBooking>[];
+    if (responce.statusCode == 200){
+      var bookingListJson = json.decode(responce.body);
+      for (var bookingJson in bookingListJson){
+        unvalied_booking.add(UnvailedBooking.fromJson(bookingJson));
+      }
+      print('success');
+    }
+    return unvalied_booking;
+  }
 }
 
 

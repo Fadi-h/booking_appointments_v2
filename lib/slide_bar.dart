@@ -15,12 +15,19 @@ class Slide_bar extends StatelessWidget {
           children: [
             SizedBox(height: 10),
             ListTile(
+              leading: Icon(Icons.check, color: Theme.of(context).primaryColor),
+              title: Text('unValid booking', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.info, color: Theme.of(context).primaryColor),
-              title: Text('Info', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.bold),),
+              title: Text('Info', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),),
             ),
             ListTile(
               leading: Icon(Icons.logout, color: Theme.of(context).primaryColor,),
-              title: Text('Log out', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.bold),),
+              title: Text('Log out', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),),
               onTap: (){
                 g.storeLoggedInID(-1);
                 g.storeLoggedInName('');

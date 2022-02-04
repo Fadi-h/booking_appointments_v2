@@ -43,15 +43,14 @@ class _ChooseTimeState extends State<ChooseTime> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(onPressed: (){
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomeUser(index_value: 2,value: 2)),
+              MaterialPageRoute(builder: (BuildContext context) => HomeUser(value: 2, index_value: 2)),
+                  (route) => false,
             );
           },
               icon: Icon(Icons.home))
@@ -82,16 +81,18 @@ class _ChooseTimeState extends State<ChooseTime> {
               margin: const EdgeInsets.only(top: 10),
               height: 100,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(width: 20),
-                  Text(
-                    '$index',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                  Container(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Text(
+                      '$index',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  const SizedBox(width: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,6 +109,7 @@ class _ChooseTimeState extends State<ChooseTime> {
                   ),
                   TextButton(
                     onPressed: ()async{
+                      showAlertDialog(context);
                       await conn.booking(value,value2, value3, _appointment[index].availableHour);
                       setState(() {
                         _appointment = [];
@@ -122,6 +124,31 @@ class _ChooseTimeState extends State<ChooseTime> {
           );
         },
       ),
+    );
+  }
+
+
+
+  showAlertDialog(BuildContext context){
+    Widget okButton = TextButton(
+      child: const Text("Ok", style: TextStyle(fontWeight: FontWeight.bold),),
+      onPressed: (){
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Done", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      content: Text("Your Appointment\nadd successfully",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),),
+      actions: [
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

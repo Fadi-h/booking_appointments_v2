@@ -17,6 +17,7 @@ class _BookingListState extends State<BookingList> {
 
   Global g = Global();
   int? id;
+  bool? delete_book;
   Connection connection = Connection();
   _getBookingList(int id) {
     Connection conn = Connection();
@@ -110,15 +111,8 @@ class _BookingListState extends State<BookingList> {
                       //   child: const Icon(Icons.edit, color: Colors.white,size: 25,),
                       // ),
                       TextButton(
-                        onPressed: (){
-                          connection.delete_user_booking(_booking[index -1].idClinicBook);
-                          setState(() {
-                            _booking = [];
-                            g.getLoggedInStatus().then((value) => {
-                              id = value,
-                              _getBookingList(id!)
-                            });
-                          });
+                        onPressed: ()async {
+                          showAlertDialog(context, index);
                         },
                         child: const Icon(Icons.delete, color: Colors.white,size: 25,),
                       ),
@@ -133,6 +127,49 @@ class _BookingListState extends State<BookingList> {
     );
   }
 
+
+  showAlertDialog(BuildContext context, index){
+    // set up the button
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold),),
+      onPressed: () {
+        setState(() {
+          delete_book = false;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+    Widget okButton = TextButton(
+      child: const Text("Yes", style: TextStyle(fontWeight: FontWeight.bold),),
+      onPressed: () async {
+        await connection.delete_user_booking(_booking[index -1].idClinicBook);
+        setState(() {
+          _booking = [];
+          g.getLoggedInStatus().then((value) => {
+            id = value,
+            _getBookingList(id!)
+          });
+        });
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Alert", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      content: Text("Do you went\nto delete this appointment?",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
 }
 

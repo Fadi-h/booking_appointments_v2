@@ -6,6 +6,8 @@ import 'package:booking_appointments/classes/booking.dart';
 import 'package:booking_appointments/classes/lab.dart';
 import 'package:booking_appointments/classes/user.dart';
 import 'package:booking_appointments/global.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class Connection {
@@ -93,6 +95,11 @@ class Connection {
     return AppointmentsList;
   }
 
+  void show_toast() => Fluttertoast.showToast(
+    msg: 'Wrong Email or password',
+    fontSize: 18
+  );
+
   Future <List<User>> getUserInformation(String user_email, String user_password) async{
     var url = '$baseUrl/test/sendData/sendData.php';
     final response = await http.post(Uri.parse(url), body: {
@@ -107,8 +114,10 @@ class Connection {
         user.add(User.fromJson(userJson));
       }
     }
-    return user;
+      return user;
   }
+
+
 
   Future booking(String doctor_name, String day, String history, int hour) async{
     Global g = Global();

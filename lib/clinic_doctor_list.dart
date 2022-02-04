@@ -65,16 +65,19 @@ class _ClinicDoctorListState extends State<ClinicDoctorList> {
               margin: const EdgeInsets.only(top: 10),
               height: 100,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 20),
-                  Text(
-                    '$index',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                  Container(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Text(
+                      '$index',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  const SizedBox(width: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +107,7 @@ class _ClinicDoctorListState extends State<ClinicDoctorList> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => BookingPage(doctorName: n.toString())));
                       },
-                      child: Icon(Icons.get_app, color: Colors.white,),)
+                      child: Icon(Icons.file_download_done, color: Colors.white,),)
                 ],
               ),
             ),

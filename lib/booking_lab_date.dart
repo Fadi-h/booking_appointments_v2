@@ -29,6 +29,7 @@ class _BookingLadDateState extends State<BookingLadDate> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('Choose time', style: TextStyle(fontWeight: FontWeight.bold),),centerTitle: true,backgroundColor: Theme.of(context).primaryColor,),
       body: SafeArea(
         child:  Column(
           children: [

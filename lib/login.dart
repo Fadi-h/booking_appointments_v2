@@ -37,7 +37,7 @@ class _LoginPage extends State<Login> {
   void initState() {
     super.initState();
     g.getLoggedInStatus().then((value){
-      if(value == -1 ){
+      if(value == -1){
         print(value);
       }else if (value! > 20000){
         Navigator.pushReplacement(context,
@@ -211,7 +211,32 @@ class _LoginPage extends State<Login> {
                       onPressed: () async {
                         _username = email.text;
                         _password = pass.text;
+                        print(_username);
+                        print(_password);
                         await _getUserInformation(_username, _password);
+                        if (_username.isEmpty && _password.isEmpty){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                  content: const Text('Please fill your email and password',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle( fontSize: 16),
+                                  )
+                              )
+                          );
+                        }
+                        else if(_user.isEmpty){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                content: const Text('wrong email or password',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle( fontSize: 16),
+                                )
+                              )
+                          );
+                        }
+
                         print(_user[0].id);
                         int id = _user[0].id;
                         setState(() {

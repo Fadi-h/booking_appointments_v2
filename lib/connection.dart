@@ -121,6 +121,23 @@ class Connection {
       return user;
   }
 
+  Future <List<User>> getDoctorInformation(String user_email, String user_password) async{
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' :  'getDoctorInformation',
+      'email' : user_email,
+      'password': user_password,
+    });
+    var user = <User>[];
+    if (response.statusCode == 200) {
+      var userListJson = json.decode(response.body);
+      for (var userJson in userListJson) {
+        user.add(User.fromJson(userJson));
+      }
+    }
+    return user;
+  }
+
   Future booking(int idDoctor, String day, String history, int hour) async{
     Global g = Global();
     var url = '$baseUrl/test/sendData/sendData.php';

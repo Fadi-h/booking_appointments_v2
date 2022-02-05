@@ -13,6 +13,7 @@ class Login extends StatefulWidget {
 }
 
 late List<dynamic> _user;
+late List<dynamic> _doctor;
 
 class _LoginPage extends State<Login> {
 
@@ -34,6 +35,15 @@ class _LoginPage extends State<Login> {
     });
   }
 
+  _getDoctorInformation(String user_email, String user_password) async{
+    Connection conn = Connection();
+    await conn.getUserInformation(user_email, user_password).then((value){
+      setState(() {
+        _doctor.addAll(value);
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +61,7 @@ class _LoginPage extends State<Login> {
       }
     });
     _user = [];
+    _doctor = [];
   }
 
 
@@ -245,17 +256,8 @@ class _LoginPage extends State<Login> {
                               )
                           );
                         }
-                        else if(_user.isEmpty){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                content: const Text('wrong email or password',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle( fontSize: 16),
-                                )
-                              )
-                          );
-                        }
+
+
                         print(_user[0].id);
                         int id = _user[0].id;
                         setState(() {

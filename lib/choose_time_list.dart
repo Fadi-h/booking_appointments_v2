@@ -3,7 +3,7 @@ import 'package:booking_appointments/home_user.dart';
 import 'package:flutter/material.dart';
 
 class ChooseTime extends StatefulWidget {
-  String value;
+  int value;
   String value2;
   String value3;
   ChooseTime({Key? key, required this.value, required this.value2,required this.value3}) : super(key: key);
@@ -17,14 +17,14 @@ late List<dynamic> _appointment;
 
 class _ChooseTimeState extends State<ChooseTime> {
   Connection conn = Connection();
-  String value;
+  int value;
   String value2;
   String value3;
   _ChooseTimeState(this.value, this.value2,this.value3);
 
-  _getAvailableAppointmentTime(String doctorName, String day, String date) {
+  _getAvailableAppointmentTime(int idDoctor, String day, String date) {
     Connection conn = Connection();
-    conn.getAvailableDoctorAppointmentHour(doctorName, day, date).then((value){
+    conn.getAvailableDoctorAppointmentHour(idDoctor, day, date).then((value){
       setState(() {
         _appointment.addAll(value);
       });

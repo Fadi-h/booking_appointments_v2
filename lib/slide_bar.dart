@@ -19,8 +19,8 @@ class Slide_bar extends StatelessWidget {
               leading: Icon(Icons.check, color: Theme.of(context).primaryColor),
               title: Text('unValid booking', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),),
               onTap: (){
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (_)=> unvailedBooking()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_)=> unvailedBooking()));
               },
             ),
             ListTile(

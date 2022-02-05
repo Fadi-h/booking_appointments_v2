@@ -102,10 +102,11 @@ class _ClinicDoctorListState extends State<ClinicDoctorList> {
                   TextButton(
                       onPressed: (){
                         String n = _doctors[index - 1].name;
+                        int i = _doctors[index - 1].id;
                         print (index - 1);
                         print(n);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => BookingPage(doctorName: n.toString())));
+                            builder: (context) => BookingPage(id_doctor: i,)));
                       },
                       child: Icon(Icons.file_download_done, color: Colors.white,),)
                 ],

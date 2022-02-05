@@ -8,10 +8,10 @@ import 'package:intl/intl.dart';
 
 class BookingPage extends StatefulWidget {
 
-  String doctorName;
-  BookingPage({Key? key, required this.doctorName}) : super(key: key);
+  int id_doctor;
+  BookingPage({Key? key, required this.id_doctor}) : super(key: key);
   @override
-  _BookingPageState createState() => _BookingPageState(doctorName);
+  _BookingPageState createState() => _BookingPageState(id_doctor);
 }
 
 late List<dynamic> _appointments;
@@ -19,15 +19,15 @@ late List<dynamic> _appointments;
 class _BookingPageState extends State<BookingPage> {
 
 
-  String doctorName;
-  _BookingPageState(this.doctorName);
+  int id_doctor;
+  _BookingPageState(this.id_doctor);
 
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
 
-  _getAppointmentsList(String name) {
+  _getAppointmentsList(int id_doctor) {
     Connection conn = Connection();
-    conn.getDoctorAppointment(name).then((value){
+    conn.getDoctorAppointment(id_doctor).then((value){
       setState(() {
         _appointments.addAll(value);
       });
@@ -56,8 +56,10 @@ class _BookingPageState extends State<BookingPage> {
   @override
   void initState() {
     super.initState();
+    print('888888888888');
+    print(id_doctor);
     _appointments = [];
-    _getAppointmentsList(doctorName);
+    _getAppointmentsList(id_doctor);
 
   }
 
@@ -130,11 +132,10 @@ class _BookingPageState extends State<BookingPage> {
       ),
       child:TextButton(
         onPressed: () async {
-          print(doctorName);
           print(focusedDay);
           String day = DateFormat.E().format(focusedDay);
           String date = DateFormat('y-M-d').format(focusedDay);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ChooseTime(value: doctorName, value2: day ,value3: date)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ChooseTime(value: id_doctor, value2: day ,value3: date)));
         },
         child: const Text(
           'Book',

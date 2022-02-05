@@ -23,6 +23,7 @@ class _LoginPage extends State<Login> {
   var _password;
   final email = TextEditingController();
   final pass = TextEditingController();
+  bool show = false;
 
   _getUserInformation(String user_email, String user_password) async{
     Connection conn = Connection();
@@ -60,7 +61,10 @@ class _LoginPage extends State<Login> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (_)=> HomeUser(value: 2,index_value: 2,)));
         }else if(id > 10000 && id < 20001){
-          Navigator.push(context,
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (_)=> HomeDoctor()));
+        }else if (id > 5001 && id < 10001){
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (_)=> HomeDoctor()));
         }
       }else if (id == -1){
@@ -174,7 +178,7 @@ class _LoginPage extends State<Login> {
                     height: 80,
                     child: TextFormField(
                         style: const TextStyle(color: Colors.white),
-                        obscureText: true,
+                        obscureText: show,
                         controller: pass,
                         validator: (pass) {
                           if (pass!.length < 6) {
@@ -182,7 +186,22 @@ class _LoginPage extends State<Login> {
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              show
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                show = !show;
+                              });
+                            },
+                          ),
                           errorStyle: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
                           prefixIcon:
                           Icon(Icons.vpn_key, color: Colors.white),
@@ -209,6 +228,7 @@ class _LoginPage extends State<Login> {
                         borderRadius: BorderRadius.circular(30)),
                     child: TextButton(
                       onPressed: () async {
+                        print('55555555555');
                         _username = email.text;
                         _password = pass.text;
                         print(_username);
@@ -236,7 +256,6 @@ class _LoginPage extends State<Login> {
                               )
                           );
                         }
-
                         print(_user[0].id);
                         int id = _user[0].id;
                         setState(() {

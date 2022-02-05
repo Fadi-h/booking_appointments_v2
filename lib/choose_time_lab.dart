@@ -1,4 +1,6 @@
 import 'package:booking_appointments/connection.dart';
+import 'package:booking_appointments/main_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChooseTimeLab extends StatefulWidget {
@@ -61,16 +63,18 @@ class _ChooseTimeLabState extends State<ChooseTimeLab> {
                   margin: const EdgeInsets.only(top: 10),
                   height: 100,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(width: 20),
-                      Text(
-                        '$index',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                      Container(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Text(
+                          '$index',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const SizedBox(width: 20),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +91,8 @@ class _ChooseTimeLabState extends State<ChooseTimeLab> {
                       ),
                       TextButton(
                           onPressed: ()async{
-                            await connection.labBooking(value, _appointments[index].availableHour.toString(), value1, value2);
+                            showAlertDialog(context);
+                            await connection.labBooking(value, _appointments[index].availableHour.toString(), value1, value2, );
                             setState(() {
                               _appointments = [];
                               _getAvailableLabHour(value2,value,value1);
@@ -106,4 +111,28 @@ class _ChooseTimeLabState extends State<ChooseTimeLab> {
       ),
     );
   }
+
+  showAlertDialog(BuildContext context){
+    Widget okButton = TextButton(
+      child: const Text("Ok", style: TextStyle(fontWeight: FontWeight.bold),),
+      onPressed: (){
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Done", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      content: Text("Your Appointment\nadd successfully",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),),
+      actions: [
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }

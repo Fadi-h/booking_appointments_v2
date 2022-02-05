@@ -72,13 +72,13 @@ class _LabListState extends State<LabList> {
                   ),
                   const SizedBox(width: 20),
                   Text(
-                      'Name: $name',
+                      '$name',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16)
+                          fontSize: 14)
                   ),
                   IconButton(onPressed: (){
                         Navigator.of(context).push(MaterialPageRoute(
@@ -93,5 +93,7 @@ class _LabListState extends State<LabList> {
       ),
     );
   }
+
+
 
 }

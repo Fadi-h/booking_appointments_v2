@@ -4,7 +4,9 @@ import 'package:booking_appointments/classes/appointment_hour.dart';
 import 'package:booking_appointments/classes/doctor.dart';
 import 'package:booking_appointments/classes/booking.dart';
 import 'package:booking_appointments/classes/lab.dart';
+import 'package:booking_appointments/classes/lab_booking.dart';
 import 'package:booking_appointments/classes/unvailed_booking.dart';
+import 'package:booking_appointments/classes/unvalid_labBook.dart';
 import 'package:booking_appointments/classes/user.dart';
 import 'package:booking_appointments/global.dart';
 import 'package:booking_appointments/unvailed_booking.dart';
@@ -14,7 +16,7 @@ import 'package:http/http.dart' as http;
 
 class Connection {
   var baseUrl = 'http://10.0.2.2:8080';
-  //var baseUrl = 'http://192.168.1.109:8080';
+  //var baseUrl = 'http://192.168.1.4:8080';
 
   Future<List<Doctor>> getDoctorList() async {
       var url = '$baseUrl/test/sendData/sendData.php';
@@ -63,11 +65,11 @@ class Connection {
     return BookingList;
   }
 
-  Future <List<Appointment>> getDoctorAppointment(String doctorName)async{
+  Future <List<Appointment>> getDoctorAppointment(int id_doctor)async{
     var url = '$baseUrl/test/sendData/sendData.php';
     final response = await http.post(Uri.parse(url), body: {
       'action' :  'getDoctorAppointment',
-      'doctorName' : doctorName,
+      'id_doctor' : id_doctor.toString(),
     });
     var AppointmentsList = <Appointment>[];
     if (response.statusCode == 200) {
@@ -79,11 +81,11 @@ class Connection {
     return AppointmentsList;
   }
 
-  Future <List<AppointmentHour>> getAvailableDoctorAppointmentHour(String doctorName, String availableDay,String date) async{
+  Future <List<AppointmentHour>> getAvailableDoctorAppointmentHour(int idDocotr, String availableDay,String date) async{
     var url = '$baseUrl/test/sendData/sendData.php';
     final response = await http.post(Uri.parse(url), body: {
       'action' :  'getAvailableDoctorAppointmentHour',
-      'doctorName' : doctorName,
+      'id_doctor' : idDocotr.toString(),
       'availableDay': availableDay,
       'bookinghistory': date
     });
@@ -119,14 +121,14 @@ class Connection {
       return user;
   }
 
-  Future booking(String doctor_name, String day, String history, int hour) async{
+  Future booking(int idDoctor, String day, String history, int hour) async{
     Global g = Global();
     var url = '$baseUrl/test/sendData/sendData.php';
     int? id_user = await g.getLoggedInStatus();
     final response = await http.post(Uri.parse(url), body: {
-      'action' :  'bookingUserAppointments',
+        'action' :  'bookingUserAppointments',
       'id_user' : id_user.toString(),
-      'doctor_name' : doctor_name,
+      'id_doctor' : idDoctor.toString(),
       'availableDay' : day,
       'bookinghistory' : history,
       'availableHour' : hour.toString()
@@ -140,6 +142,17 @@ class Connection {
     var url = '$baseUrl/test/sendData/sendData.php';
     final response = await http.post(Uri.parse(url), body: {
         'action' : 'deleteUserBooking',
+      'id_booking' : id.toString()
+    });
+    if (response.statusCode == 200){
+      print('success');
+    }
+  }
+
+  Future delete_user_Labbooking(int id)async{
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' : 'deleteUserLabBooking',
       'id_booking' : id.toString()
     });
     if (response.statusCode == 200){
@@ -211,15 +224,15 @@ class Connection {
     }
   }
 
-  Future <List<UnvailedBooking>> getUnvaliedBooking() async {
+  Future <List<UnvailedBooking>> getUnvaliedBooking(int idUser) async {
     var url = '$baseUrl/test/sendData/sendData.php';
-
-    final responce = await http.post(Uri.parse(url), body: {
+    final response = await http.post(Uri.parse(url), body: {
       'action' : 'getUnvaliedBooking',
+      'id' : idUser.toString()
     });
     var unvalied_booking = <UnvailedBooking>[];
-    if (responce.statusCode == 200){
-      var bookingListJson = json.decode(responce.body);
+    if (response.statusCode == 200){
+      var bookingListJson = json.decode(response.body);
       for (var bookingJson in bookingListJson){
         unvalied_booking.add(UnvailedBooking.fromJson(bookingJson));
       }
@@ -227,6 +240,68 @@ class Connection {
     }
     return unvalied_booking;
   }
+
+  Future valied_book(id) async {
+    Global g = Global();
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' : 'valied',
+      'id_booking' : id.toString()
+    });
+    if(response.statusCode == 200){
+      print('success');
+    }
+  }
+
+  Future valied_labbook(id) async {
+    Global g = Global();
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' : 'labvalied',
+      'id_booking' : id.toString()
+    });
+    if(response.statusCode == 200){
+      print('success');
+    }
+  }
+
+  Future <List<LabBooking>> getUserLabBooking(int id)async{
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' : 'getUserLabBooking',
+      'id' : id.toString()
+    });
+
+    var bookingList = <LabBooking>[];
+    if (response.statusCode == 200 ){
+      var bookingListJson = json.decode(response.body);
+      for (var bookingJson in bookingListJson) {
+        bookingList.add(LabBooking.fromJson(bookingJson));
+      }
+    }
+    return bookingList;
+  }
+
+  Future <List<UnvailedLabBooking>> getUnvalidBookingLab(int id) async{
+    var url = '$baseUrl/test/sendData/sendData.php';
+    final response = await http.post(Uri.parse(url), body: {
+      'action' : 'getUnvaliedLabBooking',
+      'id' : id.toString()
+    });
+    var unvalied_labbooking = <UnvailedLabBooking>[];
+    if (response.statusCode == 200){
+      print('success');
+      var bookingListJson = json.decode(response.body);
+      for (var bookingJson in bookingListJson){
+        unvalied_labbooking.add(UnvailedLabBooking.fromJson(bookingJson));
+      }
+      print('success');
+    }
+    return unvalied_labbooking;
+
+  }
+
+
 }
 
 
